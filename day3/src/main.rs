@@ -2,7 +2,6 @@ use std::env;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
@@ -24,10 +23,7 @@ fn parse_file(filename: &str) -> std::io::Result<Vec<String>> {
     let file = File::open(filename)?;
     let reader = BufReader::new(file);
 
-    Ok(reader
-        .lines()
-        .map( |s| s.unwrap() )
-        .collect())
+    Ok(reader.lines().map(|s| s.unwrap()).collect())
 }
 
 fn get_one_counts(numbers: &Vec<String>) -> Vec<usize> {
@@ -36,7 +32,7 @@ fn get_one_counts(numbers: &Vec<String>) -> Vec<usize> {
     }
 
     let bit_cnt = numbers.first().unwrap().len();
-    let mut one_count = vec!(0; bit_cnt);
+    let mut one_count = vec![0; bit_cnt];
     for str_val in numbers {
         for pos in 0..bit_cnt {
             if str_val.chars().nth(pos).unwrap() == '1' {
@@ -47,7 +43,7 @@ fn get_one_counts(numbers: &Vec<String>) -> Vec<usize> {
     one_count
 }
 
-fn calculate_diagnostic_part_1(numbers :&Vec<String>) -> usize {
+fn calculate_diagnostic_part_1(numbers: &Vec<String>) -> usize {
     if numbers.is_empty() {
         return 0;
     }
@@ -68,7 +64,6 @@ fn calculate_diagnostic_part_1(numbers :&Vec<String>) -> usize {
     gamma_rate * epsilon_rate
 }
 
-
 fn calculate_diagnostic_part_2(numbers: &Vec<String>) -> usize {
     if numbers.is_empty() {
         return 0;
@@ -76,19 +71,22 @@ fn calculate_diagnostic_part_2(numbers: &Vec<String>) -> usize {
 
     let bit_cnt = numbers.first().unwrap().len();
 
-    let mut oxygen_rating_numbers :Vec<String>= numbers.to_vec();
-    let mut co2_rating_numbers :Vec<String> = numbers.to_vec();
+    let mut oxygen_rating_numbers: Vec<String> = numbers.to_vec();
+    let mut co2_rating_numbers: Vec<String> = numbers.to_vec();
     for pos in 0..bit_cnt {
         if oxygen_rating_numbers.len() > 1 {
             let one_cnt = get_one_counts(&oxygen_rating_numbers);
             let total = oxygen_rating_numbers.len();
-            oxygen_rating_numbers = oxygen_rating_numbers.iter().filter_map(|num| {
-                if num.chars().nth(pos).unwrap() == get_most_common(one_cnt[pos], total) {
-                    Some(num.to_owned())
-                } else {
-                    None
-                }
-            }).collect();
+            oxygen_rating_numbers = oxygen_rating_numbers
+                .iter()
+                .filter_map(|num| {
+                    if num.chars().nth(pos).unwrap() == get_most_common(one_cnt[pos], total) {
+                        Some(num.to_owned())
+                    } else {
+                        None
+                    }
+                })
+                .collect();
         }
     }
 
@@ -96,13 +94,16 @@ fn calculate_diagnostic_part_2(numbers: &Vec<String>) -> usize {
         if co2_rating_numbers.len() > 1 {
             let one_cnt = get_one_counts(&co2_rating_numbers);
             let total = co2_rating_numbers.len();
-            co2_rating_numbers = co2_rating_numbers.iter().filter_map(|num| {
-                if num.chars().nth(pos).unwrap() == get_least_common(one_cnt[pos], total) {
-                    Some(num.to_owned())
-                } else {
-                    None
-                }
-            }).collect();
+            co2_rating_numbers = co2_rating_numbers
+                .iter()
+                .filter_map(|num| {
+                    if num.chars().nth(pos).unwrap() == get_least_common(one_cnt[pos], total) {
+                        Some(num.to_owned())
+                    } else {
+                        None
+                    }
+                })
+                .collect();
         }
     }
     let oxygen_rating = usize::from_str_radix(oxygen_rating_numbers.first().unwrap(), 2).unwrap();

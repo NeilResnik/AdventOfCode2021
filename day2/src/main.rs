@@ -53,14 +53,11 @@ fn parse_instruction(instr: &str) -> Result<Direction, String> {
 }
 
 fn calculate_postion_part_1(instructions: &Vec<Direction>) -> i32 {
-    let (horizontal, depth) =
-        instructions
-            .iter()
-            .fold((0, 0), |(h, d), dir| match dir {
-                Direction::Forward(value) => (h + value, d),
-                Direction::Down(value) => (h, d + value),
-                Direction::Up(value) => (h, d - value),
-            });
+    let (horizontal, depth) = instructions.iter().fold((0, 0), |(h, d), dir| match dir {
+        Direction::Forward(value) => (h + value, d),
+        Direction::Down(value) => (h, d + value),
+        Direction::Up(value) => (h, d - value),
+    });
 
     horizontal * depth
 }
