@@ -47,14 +47,14 @@ fn calculate_diagnostic_part_1(numbers: &Vec<String>) -> usize {
     if numbers.is_empty() {
         return 0;
     }
-    let one_count = get_one_counts(numbers);
+    let one_counts = get_one_counts(numbers);
     let total_nums = numbers.len();
     let bit_cnt = numbers.first().unwrap().len();
 
     let mut gamma_rate = 0;
     let mut epsilon_rate = 0;
-    for pos in 0..one_count.len() {
-        if one_count[pos] > total_nums - one_count[pos] {
+    for pos in 0..one_counts.len() {
+        if one_counts[pos] > total_nums - one_counts[pos] {
             gamma_rate |= 1 << (bit_cnt - pos - 1);
         } else {
             epsilon_rate |= 1 << (bit_cnt - pos - 1);
